@@ -1,0 +1,467 @@
+<!doctype html>
+<html lang="es">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+  <meta name="theme-color" content="#f6f7f9">
+  <title>Cotiza · V4</title>
+  <link rel="stylesheet" href="./styles.css">
+</head>
+<body>
+  <div class="app-shell">
+    <header class="topbar">
+      <div class="topbar-inner">
+        <div class="wordmark">COTIZA</div>
+        <div id="headerDate" class="header-date"></div>
+      </div>
+    </header>
+
+    <main class="main">
+      <!-- INICIO -->
+      <section class="page active" data-page="home">
+        <div class="intro">
+          <p id="greeting" class="greeting">Buenas tardes</p>
+          <p class="intro-copy">Describí el trabajo como te salga. Yo ordeno los datos y te pregunto solamente lo que falte.</p>
+        </div>
+
+        <section class="panel composer-panel">
+          <div class="panel-head">
+            <div>
+              <span class="eyebrow">Nuevo trabajo</span>
+              <h1>¿De qué se trata el trabajo?</h1>
+            </div>
+            <span id="engineBadge" class="engine-badge">Motor v4</span>
+          </div>
+
+          <textarea
+            id="rawInput"
+            class="main-input"
+            rows="7"
+            placeholder="Ej.: Me llamó Lucía al 099123456. Cambio de cerradura en Rivera 2345 apto 302. Quedamos en $4.500 hoy a las 20:30."
+          ></textarea>
+
+          <div class="example-row">
+            <button class="chip" data-example="Lucía 099123456 cambio de cerradura Rivera 2345 $4500 hoy 20:30">Seco</button>
+            <button class="chip" data-example="Me llamó Lucía al 099123456 porque se le rompió la cerradura. Es en Rivera 2345 apto 302. Quedamos en $4.500 y voy en media hora.">Narrativo</button>
+            <button class="chip" data-example="Martín 098222333, revisar un portón en Av. Italia 4220, $3000, mañana a las 9">Otro rubro</button>
+          </div>
+
+          <button id="interpretBtn" class="btn btn-primary">Capturar trabajo</button>
+        </section>
+
+        <!-- ACLARACIONES -->
+        <section id="clarificationPanel" class="panel clarification-panel hidden">
+          <div class="notice-head">
+            <span class="notice-dot"></span>
+            <strong id="clarificationTitle">Necesito un dato más</strong>
+          </div>
+
+          <p id="clarificationSummary" class="secondary-text"></p>
+
+          <div id="questionArea" class="question-area">
+            <label id="questionLabel" for="clarificationInput">¿Qué trabajo vas a realizar?</label>
+            <input id="clarificationInput" type="text">
+            <div id="choiceArea" class="choice-area hidden"></div>
+          </div>
+
+          <div class="button-row">
+            <button id="answerBtn" class="btn btn-primary btn-fit">Continuar</button>
+          </div>
+        </section>
+
+        <!-- RESULTADO -->
+        <section id="resultPanel" class="panel result-panel hidden">
+          <div class="panel-head">
+            <div>
+              <span class="eyebrow">Revisá antes de guardar</span>
+              <h2 id="resultJobTitle">Trabajo</h2>
+            </div>
+            <span id="resultStateBadge" class="state-badge understood">Listo</span>
+          </div>
+
+          <div id="inferenceNotice" class="inference-notice hidden"></div>
+
+          <div class="natural-description">
+            <div class="description-head">
+              <div>
+                <span class="eyebrow">Mensaje operativo</span>
+                <p>Este texto queda completo para que puedas compartirlo con otra persona si necesitás derivar el trabajo.</p>
+              </div>
+            </div>
+
+            <textarea id="descriptionField" rows="8"></textarea>
+
+            <div class="description-actions">
+              <button id="shareDescriptionBtn" class="btn btn-primary btn-fit">Compartir trabajo</button>
+              <button id="copyDescriptionBtn" class="btn btn-secondary btn-fit">Copiar</button>
+            </div>
+          </div>
+
+          <div class="field-grid">
+            <label>
+              <span>Cliente</span>
+              <input id="clientField" type="text" placeholder="Nombre">
+            </label>
+
+            <label>
+              <span>Teléfono</span>
+              <input id="phoneField" type="tel" inputmode="tel" placeholder="09x xxx xxx">
+            </label>
+
+            <label class="wide">
+              <span>Dirección</span>
+              <input id="addressField" type="text" placeholder="Calle, número, apto / local">
+            </label>
+
+            <label>
+              <span>Barrio <small>(opcional)</small></span>
+              <input id="neighborhoodField" type="text" placeholder="Ej.: Pocitos">
+            </label>
+
+            <label>
+              <span>Precio acordado</span>
+              <input id="priceField" type="number" inputmode="decimal" min="0" step="1" placeholder="0">
+            </label>
+
+            <label>
+              <span>Fecha</span>
+              <input id="dateField" type="date">
+            </label>
+
+            <label>
+              <span>Hora</span>
+              <input id="timeField" type="time">
+            </label>
+          </div>
+
+          <div id="reminderSuggestion" class="reminder-box hidden">
+            <div>
+              <span class="eyebrow">Recordatorio</span>
+              <strong id="reminderText"></strong>
+              <small id="reminderReason"></small>
+            </div>
+            <button id="editReminderBtn" class="btn btn-secondary btn-fit">Cambiar</button>
+          </div>
+
+          <div id="reminderEditor" class="reminder-editor hidden">
+            <label>
+              Avisarme
+              <select id="reminderOffset">
+                <option value="0">Ahora</option>
+                <option value="15">15 minutos antes</option>
+                <option value="30">30 minutos antes</option>
+                <option value="60">1 hora antes</option>
+                <option value="120">2 horas antes</option>
+                <option value="180">3 horas antes</option>
+                <option value="1440">1 día antes</option>
+              </select>
+            </label>
+          </div>
+
+          <details class="trace-panel">
+            <summary>Ver interpretación técnica</summary>
+            <pre id="traceOutput"></pre>
+          </details>
+
+          <div class="button-row result-actions">
+            <button id="saveJobBtn" class="btn btn-primary">Guardar trabajo</button>
+          </div>
+        </section>
+
+        <!-- CIERRE / RESULTADO DEL SERVICIO -->
+        <section id="closePanel" class="panel close-panel hidden">
+          <div class="panel-head">
+            <div>
+              <span class="eyebrow">Resultado del servicio</span>
+              <h2 id="closeTitle">¿Qué pasó?</h2>
+            </div>
+            <button id="cancelCloseBtn" class="btn btn-quiet btn-fit">Cerrar</button>
+          </div>
+
+          <div class="status-options">
+            <button class="status-option" data-close-status="realizado">Realizado</button>
+            <button class="status-option" data-close-status="no_realizado">No realizado</button>
+            <button class="status-option" data-close-status="reprogramado">Reprogramar</button>
+          </div>
+
+          <div id="doneFields" class="close-fields hidden">
+            <div class="field-grid">
+              <label>
+                <span>Precio final</span>
+                <input id="finalPriceField" type="number" inputmode="decimal" min="0" step="1">
+              </label>
+
+              <label>
+                <span>Estado del pago</span>
+                <select id="paymentStatusField">
+                  <option value="pagado">Pagado</option>
+                  <option value="parcial">Pago parcial</option>
+                  <option value="pendiente">Pendiente</option>
+                </select>
+              </label>
+
+              <label>
+                <span>Importe pagado</span>
+                <input id="paidAmountField" type="number" inputmode="decimal" min="0" step="1">
+              </label>
+
+              <label>
+                <span>Método de pago</span>
+                <select id="paymentMethodField">
+                  <option value="">Sin especificar</option>
+                  <option value="efectivo">Efectivo</option>
+                  <option value="transferencia">Transferencia</option>
+                  <option value="mercado_pago">Mercado Pago / link</option>
+                  <option value="otro">Otro</option>
+                </select>
+              </label>
+            </div>
+          </div>
+
+          <div id="rescheduleFields" class="close-fields hidden">
+            <div class="field-grid">
+              <label>
+                <span>Nueva fecha</span>
+                <input id="rescheduleDateField" type="date">
+              </label>
+              <label>
+                <span>Nueva hora</span>
+                <input id="rescheduleTimeField" type="time">
+              </label>
+            </div>
+          </div>
+
+          <label class="notes-label">
+            <span>¿Qué pasó?</span>
+            <textarea id="resultNotesField" rows="4" placeholder="Ej.: Se cambió la cerradura y también hubo que cambiar el cilindro."></textarea>
+          </label>
+
+          <button id="saveResultBtn" class="btn btn-primary hidden">Guardar resultado</button>
+        </section>
+
+        <!-- RESUMEN FINAL -->
+        <section id="finalSummaryPanel" class="panel final-summary-panel hidden">
+          <div class="panel-head">
+            <div>
+              <span class="eyebrow">Servicio actualizado</span>
+              <h2>Resumen</h2>
+            </div>
+          </div>
+
+          <textarea id="finalSummaryField" rows="7"></textarea>
+
+          <div class="description-actions">
+            <button id="shareFinalSummaryBtn" class="btn btn-primary btn-fit">Compartir resumen</button>
+            <button id="copyFinalSummaryBtn" class="btn btn-secondary btn-fit">Copiar</button>
+          </div>
+        </section>
+
+        <section class="list-section">
+          <div class="section-head">
+            <div>
+              <span class="eyebrow">Guardados</span>
+              <h2>Trabajos</h2>
+            </div>
+            <button id="clearJobsBtn" class="btn btn-quiet btn-fit">Limpiar</button>
+          </div>
+          <div id="jobsList" class="stack-list"></div>
+        </section>
+      </section>
+
+      <!-- RECORDATORIOS -->
+      <section class="page" data-page="reminders">
+        <div class="intro">
+          <p class="greeting">Recordatorios</p>
+          <p class="intro-copy">La app ajusta el aviso según cuánto falta para el trabajo.</p>
+        </div>
+
+        <section class="summary-grid v432-summary-grid">
+          <div class="summary-card" data-v4-filter="upcoming">
+            <span>Próximos</span>
+            <strong id="metricUpcoming">0</strong>
+          </div>
+          <div class="summary-card" data-v4-filter="today">
+            <span>Hoy</span>
+            <strong id="metricToday">0</strong>
+          </div>
+          <div class="summary-card" data-v4-filter="pending">
+            <span>Pendientes</span>
+            <strong id="metricPending">0</strong>
+          </div>
+          <div class="summary-card" data-v4-filter="done">
+            <span>Hechos</span>
+            <strong id="metricDone">0</strong>
+          </div>
+          <div class="summary-card" data-v4-filter="missed">
+            <span>No realizados</span>
+            <strong id="metricMissed">0</strong>
+          </div>
+        </section>
+
+        <section class="list-section">
+          <div class="section-head">
+            <div>
+              <span class="eyebrow">Agenda</span>
+              <h2>Pendientes</h2>
+            </div>
+          </div>
+          <div id="remindersList" class="stack-list"></div>
+        </section>
+      </section>
+
+      <!-- PERFIL -->
+      <section class="page" data-page="profile">
+        <div class="intro">
+          <p class="greeting">Perfil</p>
+          <p class="intro-copy">Tus datos y preferencias. Nada más de lo necesario.</p>
+        </div>
+
+        <section class="panel profile-card">
+          <div class="profile-top">
+            <label class="avatar-picker">
+              <input id="logoInput" type="file" accept="image/*">
+              <img id="profileLogo" class="avatar-image hidden" alt="Logo o foto">
+              <span id="profileInitials" class="avatar-initials">TU</span>
+            </label>
+
+            <div>
+              <h2 id="previewName">Tu nombre</h2>
+              <p id="previewTrade" class="secondary-text">A qué te dedicás</p>
+            </div>
+          </div>
+
+          <div id="previewContacts" class="contact-list"></div>
+
+          <button id="shareProfileBtn" class="btn btn-primary">Compartir tarjeta</button>
+        </section>
+
+        <section class="panel">
+          <div class="section-head">
+            <div>
+              <span class="eyebrow">Datos</span>
+              <h2>Información personal</h2>
+            </div>
+          </div>
+
+          <div class="field-grid">
+            <label><span>Nombre</span><input id="profileName" type="text" placeholder="Tu nombre"></label>
+            <label><span>¿A qué te dedicás?</span><input id="profileTrade" type="text" placeholder="Ej.: Cerrajero"></label>
+            <label><span>Empresa o nombre del negocio <small>(opcional)</small></span><input id="profileBusiness" type="text" placeholder="Ej.: Cerrajería JP"></label>
+            <label><span>Teléfono / WhatsApp</span><input id="profilePhone" type="tel" placeholder="09x xxx xxx"></label>
+            <label><span>Email</span><input id="profileEmail" type="email" placeholder="Opcional"></label>
+            <label><span>Instagram</span><input id="profileInstagram" type="text" placeholder="@usuario"></label>
+          </div>
+
+          <button id="saveProfileBtn" class="btn btn-primary">Guardar perfil</button>
+        </section>
+
+        <section class="panel">
+          <div class="section-head">
+            <div>
+              <span class="eyebrow">Cobro</span>
+              <h2>Métodos de pago</h2>
+            </div>
+          </div>
+
+          <label class="toggle-row">
+            <span>Aceptar efectivo</span>
+            <input id="payCash" type="checkbox" checked>
+          </label>
+
+          <div class="field-grid">
+            <label>
+              <span>Banco</span>
+              <input id="bankName" type="text" placeholder="Ej.: BROU">
+            </label>
+            <label>
+              <span>Titular</span>
+              <input id="bankHolder" type="text" placeholder="Nombre del titular">
+            </label>
+            <label class="wide">
+              <span>Cuenta / referencia</span>
+              <input id="bankAccount" type="text" placeholder="Cuenta o dato para transferir">
+            </label>
+            <label>
+              <span>Nombre del link de pago</span>
+              <input id="paymentLinkLabel" type="text" placeholder="Ej.: Mercado Pago">
+            </label>
+            <label>
+              <span>Link de pago</span>
+              <input id="paymentLinkUrl" type="url" placeholder="https://...">
+            </label>
+          </div>
+
+          <button id="savePaymentsBtn" class="btn btn-secondary">Guardar métodos</button>
+        </section>
+
+        <section class="panel">
+          <div class="section-head">
+            <div>
+              <span class="eyebrow">Preferencias</span>
+              <h2>Aplicación</h2>
+            </div>
+          </div>
+
+          <label class="setting-row">
+            <div>
+              <strong>Si no indico fecha</strong>
+              <span>La opción “Hoy” queda marcada como inferida.</span>
+            </div>
+            <select id="missingDateBehavior">
+              <option value="today">Asumir hoy</option>
+              <option value="ask">Preguntarme</option>
+            </select>
+          </label>
+
+          <label class="setting-row">
+            <div>
+              <strong>Recordatorio normal</strong>
+              <span>Para trabajos con suficiente anticipación.</span>
+            </div>
+            <select id="defaultReminderOffset">
+              <option value="30">30 min antes</option>
+              <option value="60">1 hora antes</option>
+              <option value="120">2 horas antes</option>
+              <option value="180">3 horas antes</option>
+              <option value="1440">1 día antes</option>
+            </select>
+          </label>
+
+          <label class="setting-row">
+            <div>
+              <strong>Moneda</strong>
+              <span>Para precios acordados y finales.</span>
+            </div>
+            <select id="currencySelect">
+              <option value="UYU">UYU</option>
+              <option value="USD">USD</option>
+              <option value="ARS">ARS</option>
+            </select>
+          </label>
+
+          <button id="savePrefsBtn" class="btn btn-secondary">Guardar preferencias</button>
+        </section>
+      </section>
+    </main>
+
+    <nav class="bottom-nav" aria-label="Navegación principal">
+      <button class="nav-item active" data-target="home">
+        <span class="nav-symbol">⌂</span>
+        <span>Inicio</span>
+      </button>
+      <button class="nav-item" data-target="reminders">
+        <span class="nav-symbol">◷</span>
+        <span>Recordatorios</span>
+      </button>
+      <button class="nav-item" data-target="profile">
+        <span class="nav-symbol">◎</span>
+        <span>Perfil</span>
+      </button>
+    </nav>
+
+    <div id="toast" class="toast"></div>
+  </div>
+
+  <script src="./app.js"></script>
+</body>
+</html>

@@ -1,0 +1,177 @@
+{
+  "version": "1.0.0",
+  "locale": "es-UY",
+  "currency": {
+    "code": "UYU",
+    "symbol": "$",
+    "thousandsSeparators": [
+      ".",
+      " "
+    ],
+    "decimalSeparators": [
+      ","
+    ]
+  },
+  "normalization": {
+    "lowercase": true,
+    "stripAccentsForMatching": true
+  },
+  "client": {
+    "patterns": [
+      "\\bpara\\s+([A-ZÁÉÍÓÚÑ][a-záéíóúñ]+(?:\\s+[A-ZÁÉÍÓÚÑ][a-záéíóúñ]+){0,2})",
+      "\\bcliente\\s*[:\\-]?\\s*([A-ZÁÉÍÓÚÑ][a-záéíóúñ]+(?:\\s+[A-ZÁÉÍÓÚÑ][a-záéíóúñ]+){0,2})"
+    ],
+    "stopWords": [
+      "el",
+      "la",
+      "los",
+      "las",
+      "un",
+      "una",
+      "presupuesto",
+      "trabajo",
+      "cambio",
+      "pintar",
+      "instalar",
+      "reparar",
+      "hacer",
+      "mañana",
+      "hoy",
+      "viernes",
+      "sábado",
+      "sabado",
+      "domingo",
+      "lunes",
+      "martes",
+      "miércoles",
+      "miercoles",
+      "jueves"
+    ]
+  },
+  "money": {
+    "labeled": {
+      "materiales": [
+        "\\bmaterial(?:es)?\\s*(?:incluidos?)?\\s*[:\\-]?\\s*\\$?\\s*([0-9][0-9\\.\\s]*(?:,[0-9]{1,2})?)",
+        "\\bmaterial(?:es)?\\s+(?:por|son|sale|salen|cuesta|cuestan)\\s*\\$?\\s*([0-9][0-9\\.\\s]*(?:,[0-9]{1,2})?)"
+      ],
+      "manoObra": [
+        "\\bmano\\s+de\\s+obra\\s*[:\\-]?\\s*\\$?\\s*([0-9][0-9\\.\\s]*(?:,[0-9]{1,2})?)",
+        "\\bmano\\s+de\\s+obra\\s+(?:por|son|sale|cuesta)\\s*\\$?\\s*([0-9][0-9\\.\\s]*(?:,[0-9]{1,2})?)"
+      ],
+      "total": [
+        "\\btotal\\s*[:\\-]?\\s*\\$?\\s*([0-9][0-9\\.\\s]*(?:,[0-9]{1,2})?)",
+        "\\bpresupuesto\\s+(?:de|por)\\s*\\$?\\s*([0-9][0-9\\.\\s]*(?:,[0-9]{1,2})?)"
+      ]
+    },
+    "genericAmountPattern": "\\$\\s*([0-9][0-9\\.\\s]*(?:,[0-9]{1,2})?)"
+  },
+  "dates": {
+    "relative": {
+      "hoy": 0,
+      "mañana": 1,
+      "manana": 1,
+      "pasado mañana": 2,
+      "pasado manana": 2
+    },
+    "weekdays": {
+      "domingo": 0,
+      "lunes": 1,
+      "martes": 2,
+      "miércoles": 3,
+      "miercoles": 3,
+      "jueves": 4,
+      "viernes": 5,
+      "sábado": 6,
+      "sabado": 6
+    },
+    "explicitPatterns": [
+      "\\b(\\d{1,2})[\\/\\-](\\d{1,2})(?:[\\/\\-](\\d{2,4}))?\\b"
+    ]
+  },
+  "reminder": {
+    "relativePatterns": [
+      "\\b(?:recordame|recordarme|avisame|avísame|alerta)\\s+(?:en|dentro\\s+de)\\s+(\\d+)\\s+(día|días|dias|hora|horas)\\b"
+    ],
+    "weekdayPatterns": [
+      "\\b(?:recordame|recordarme|avisame|avísame|alerta)\\s+(?:el\\s+)?(lunes|martes|miércoles|miercoles|jueves|viernes|sábado|sabado|domingo)\\b"
+    ]
+  },
+  "jobs": [
+    {
+      "id": "cerradura",
+      "keywords": [
+        "cerradura",
+        "cerraduras",
+        "cerrojo"
+      ],
+      "title": "Cambio de cerradura",
+      "template": "Suministro y/o cambio de cerradura, retiro del elemento existente, instalación, ajuste y comprobación de funcionamiento."
+    },
+    {
+      "id": "pintura",
+      "keywords": [
+        "pintar",
+        "pintura",
+        "pintado",
+        "pintura interior",
+        "pintura exterior"
+      ],
+      "title": "Trabajo de pintura",
+      "template": "Preparación básica de superficies y aplicación de pintura según lo indicado en el presupuesto."
+    },
+    {
+      "id": "electricidad",
+      "keywords": [
+        "eléctrico",
+        "electrico",
+        "electricidad",
+        "enchufe",
+        "tomacorriente",
+        "llave de luz",
+        "luminaria"
+      ],
+      "title": "Trabajo eléctrico",
+      "template": "Revisión y ejecución del trabajo eléctrico indicado, incluyendo instalación, ajuste y verificación básica de funcionamiento."
+    },
+    {
+      "id": "sanitaria",
+      "keywords": [
+        "canilla",
+        "grifo",
+        "caño",
+        "cano",
+        "pérdida",
+        "perdida",
+        "sanitaria",
+        "cisterna"
+      ],
+      "title": "Trabajo de sanitaria",
+      "template": "Revisión y reparación del trabajo sanitario indicado, con ajuste y prueba básica de funcionamiento."
+    },
+    {
+      "id": "carpinteria",
+      "keywords": [
+        "puerta",
+        "mueble",
+        "madera",
+        "carpintería",
+        "carpinteria"
+      ],
+      "title": "Trabajo de carpintería",
+      "template": "Ejecución del trabajo de carpintería indicado, incluyendo ajuste, montaje o reparación según corresponda."
+    }
+  ],
+  "status": {
+    "default": "borrador",
+    "allowed": [
+      "borrador",
+      "enviado",
+      "aceptado",
+      "rechazado"
+    ]
+  },
+  "description": {
+    "fallback": "Trabajo según detalle indicado por el cliente.",
+    "appendSourceSummary": true
+  }
+}
